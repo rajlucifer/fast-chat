@@ -2,16 +2,31 @@ import React from 'react'
 import assets from '../assets/assets'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 export const ProfilePage = () => {
+  const {authUser,updateProfile} = useContext(AuthContext);
   const [selectedImg,setSelectedImg] = useState(null);
   const navigate = useNavigate();
-  const [name,setName] = useState("Martin jhonson");
-  const [bio,setBio] = useState("Hi everyone i am using Quick chat");
+  const [name,setName] = useState(authUser.fullName);
+  const [bio,setBio] = useState(authUser.bio);
   const submitHandler = async (e)=>{
-    e.preventDefault;
+    e.preventDefault();
     //after sumbit it goes to home page
-    navigate("/")
+    if(!selectedImg){
+      await  updateProfile({fullName:name,bio});
+      navigate("/");
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedImg);
+    reader.onload = async()=>{
+      const base64Img = reader.result;
+      await updateProfile({profilePic:base64Img,fullName:name,bio});
+      navigate("/");
+    }
+    
 
   }
     return (
@@ -32,7 +47,7 @@ export const ProfilePage = () => {
 
 
         </form>
-        <img src={assets.logo_icon} alt='logo-icon' className='max-w-44  aspect-square rounded-full mx-10 max-sm:mt-10' ></img>
+        <img src={authUser?.profilePic||assets.logo_icon} alt='logo-icon' className={`max-w-44  aspect-square rounded-full mx-10 max-sm:mt-10 ${selectedImg && 'rounded-full'}`} ></img>
       </div>
        
     </div>
