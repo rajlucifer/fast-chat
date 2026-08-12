@@ -4,18 +4,18 @@ import jwt from "jsonwebtoken";
 
 //middleware to protect the routes
 
-export const protectRoutes = async(req,res,next)=>{
-    try{
-        const token  = req.headers.token;
-        const decoded = jwt.verify(token,process.env.JWT_SECRET);
+export const protectRoutes = async (req, res, next) => {
+    try {
+        const token = req.headers.token;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
 
-        const user = UserModel.findById(decoded.userData._id);
+        const user = await UserModel.findById(decoded.userId);
 
-        if(!user){
-            res.json({
-                success:false,
-                message:"User Not Found"
+        if (!user) {
+            return res.json({
+                success: false,
+                message: "User Not Found"
             })
         }
         // by doing this we can add the user data in the req.user easily 
@@ -24,11 +24,11 @@ export const protectRoutes = async(req,res,next)=>{
 
 
     }
-    catch(error){
+    catch (error) {
         console.log(error.message);
         res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
 
     }
@@ -38,10 +38,10 @@ export const protectRoutes = async(req,res,next)=>{
 
 //controller to check user is authenticated
 
-export const checkAuth = async(req,res)=>{
+export const checkAuth = async (req, res) => {
     res.json({
-        success:true,
-        user:req.user
+        success: true,
+        user: req.user
     })
 
 
