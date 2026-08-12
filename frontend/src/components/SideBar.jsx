@@ -2,8 +2,11 @@ import React from 'react'
 import assets from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { userDummyData } from '../assets/assets'
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 export const SideBar = ({ selectedUser, setSelectedUser }) => {
+    const {logout} = useContext(AuthContext);
     const navigate = useNavigate();
     return (
         // here we use the bg-color/10 here 10 is for the transperency 
@@ -18,7 +21,7 @@ export const SideBar = ({ selectedUser, setSelectedUser }) => {
                            text-gray-100 hidden group-hover:block'>
                             <p onClick={()=>navigate("/profile")} className='cursor-pointer text-sm'>Edit Profile</p>
                             <hr className='my-2 border-t border-gray-500'></hr>
-                            <p className='cursor-pointer text-sm'>LogOut</p>
+                            <p onClick={()=>logout()} className='cursor-pointer text-sm'>LogOut</p>
                         </div>
 
                     </div>
