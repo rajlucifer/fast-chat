@@ -108,7 +108,9 @@ export const sendMessage = async(req,res)=>{
         const senderId = req.user._id;
         let imageUrl;
         if(image){
-            const uploadResponse = await cloudinary.uploader.upload(image);
+            const uploadResponse = await cloudinary.uploader.unsigned_upload(image, "chat-profile-pic", {
+                resource_type: "auto"
+            });
             imageUrl = uploadResponse.secure_url;
 
 

@@ -56,8 +56,9 @@ io.on("connection",(socket)=>{
 
 //middleware 
 // we create the limit so that only less then 4mb file can be use
-app.use(express.json({limit:"4mb"}))
 app.use(cors());
+app.use(express.json({limit:"4mb"}))
+ 
 
 app.use("/api/status",(req,res)=>
     // this show in frontend
