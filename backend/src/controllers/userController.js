@@ -31,7 +31,7 @@ export const signup = async(req,res)=>{
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password,salt); 
         // here we creating the new user 
-        const newUser = UserModel.create({
+        const newUser = await UserModel.create({
             fullName,
             email,
             password:hashedPassword,
@@ -67,13 +67,13 @@ export const signup = async(req,res)=>{
 export const login = async(req,res)=>{
     try{
         const {email,password} = req.body;
-        const userData = await userModel.findOne({email});
+        const userData = await UserModel.findOne({email});
 
 
-        const isPasswordCorrect = await bcrypt.compare(password,userData.hashedPassword);
+        const isPasswordCorrect = await bcrypt.compare(password,userData.password);
 
         if(!isPasswordCorrect){
-            res.json({
+            return res.json({
                 success:false,
                 message:"Invalid Credentials"
             })
@@ -115,7 +115,9 @@ export const updateProfile = async(req,res)=>{
             updatedUser = await UserModel.findByIdAndUpdate(userId,{fullName,bio},{new:true});
         }
         else{
-            const upload =  await cloudinary.uploader.upload(profilePic);
+            const upload = await cloudinary.uploader.unsigned_upload(profilePic, "chat-profile-pic", {
+                resource_type: "auto"
+            });
             updatedUser = await UserModel.findByIdAndUpdate(userId,{profilePic:upload.secure_url,bio,fullName},{new:true});
 
 
@@ -123,6 +125,7 @@ export const updateProfile = async(req,res)=>{
         }
         res.json({
             success:true,
+            user:updatedUser,
             message:"Profile update Successfully"
         })
 
