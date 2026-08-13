@@ -1,12 +1,18 @@
 import React from 'react'
 import assets from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
-import { userDummyData } from '../assets/assets'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
+import { ChatContext } from '../context/ChatContext'
+import { useState } from 'react'
 
-export const SideBar = ({ selectedUser, setSelectedUser }) => {
-    const {logout} = useContext(AuthContext);
+export const SideBar = () => {
+
+    const {getUsers,users,setSelectedUser,selectedUser,unseenMessage,
+            setUnseenMessage} = useContext(ChatContext)
+    const {logout,onlineUsers} = useContext(AuthContext);
+    const [input,setInput] = useState(false);
+    const filteredUsers = input ? users.filter((users)=>user.fullName.toLowerCase().includes(input.toLowerCase())) : users;
     const navigate = useNavigate();
     return (
         // here we use the bg-color/10 here 10 is for the transperency 
@@ -29,11 +35,11 @@ export const SideBar = ({ selectedUser, setSelectedUser }) => {
                 {/*here we create the search bar */}
                 <div className='bg-[#282142] rounded-full mt-5 flex px-3 py-4 items-center gap-2'>
                     <img src={assets.search_icon} alt="search" className='max-w-3'></img>
-                    <input type='text' placeholder='Search User ...' className='bg-transparent border-none  outline-none text-white text-xs
+                    <input onChange={(e)=>setInput(e.target.value)} type='text' placeholder='Search User ...' className='bg-transparent border-none  outline-none text-white text-xs
                      placeholder-[#c8c8c8c] flex-1'></input>
                 </div>
                 <div className='flex flex-col '>
-                    {userDummyData.map((user,index)=>(
+                    {filteredUsers.map((user,index)=>(
                         <div key={index} onClick={()=>(setSelectedUser(user))} className={`relative flex items-center gap-2 p-2  pl-4 rounded-md cursor-pointer  max-sm:text-sm 
                             ${selectedUser?._id === user._id && 'bg-[#282142]/50' }`}>
                             <img src={user?.profilePic || assets.avatar_icon} alt="user" className='w-[35px] aspect-[1/1] rounded-full' ></img>
