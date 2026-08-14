@@ -66,7 +66,7 @@ app.use("/api/status",(req,res)=>
     
 );
 app.use("/api/auth",userRouter);
-app.use("/api/message",messageRouter);
+app.use("/api/messages",messageRouter);
  
 
 
