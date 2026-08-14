@@ -3,16 +3,18 @@ import { SideBar } from '../components/SideBar'
 import { ChatContainer } from '../components/ChatContainer'
 import { RightSideBar } from '../components/RightSideBar'
 import { useState } from 'react'
+import { useContext } from 'react'
+import { ChatContext } from '../context/ChatContext'
 
 export const HomePage = () => {
-    const [selectedUser,setSelectedUser] = useState(false);
+    const {selectedUser} = useContext(ChatContext);
     return (
         <div className='text-white w-full h-screen sm:px-[15%] sm:py-[5%]  '>
             <div className={`border-2 border-white backdrop-blur-xl rounded-xl overflow-hidden h-[100%] grid grid-cols-1 relative
                   ${selectedUser ? "md:grid-cols-[1fr_1.5fr_1fr] xl:grid-cols-[1fr_2fr_1fr]":"md:grid-cols-2"}`}>
-                <SideBar selectedUser={selectedUser} setSelectedUser={setSelectedUser} /> {/*yeah 1 column me gaya hai  */}
-                <ChatContainer selectedUser={selectedUser} setSelectedUser={setSelectedUser} />{/*yeah 2 column me gaya hai  */}
-                <RightSideBar selectedUser={selectedUser} setSelectedUser={setSelectedUser} />{/*yeah 1 column me gaya hai   that's why look like this*/}
+                <SideBar/> {/*yeah 1 column me gaya hai  */}
+                <ChatContainer />{/*yeah 2 column me gaya hai  */}
+                <RightSideBar />{/*yeah 1 column me gaya hai   that's why look like this*/}
                  
             </div>
         </div>
