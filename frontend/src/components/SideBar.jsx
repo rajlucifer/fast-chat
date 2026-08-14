@@ -5,15 +5,20 @@ import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 export const SideBar = () => {
 
     const {getUsers,users,setSelectedUser,selectedUser,unseenMessage,
             setUnseenMessage} = useContext(ChatContext)
-    const {logout,onlineUsers} = useContext(AuthContext);
+    const {logout,onlineUser} = useContext(AuthContext);
     const [input,setInput] = useState(false);
-    const filteredUsers = input ? users.filter((users)=>user.fullName.toLowerCase().includes(input.toLowerCase())) : users;
+    const filteredUsers = input ? users.filter((user)=>user.fullName.toLowerCase().includes(input.toLowerCase())) : users;
     const navigate = useNavigate();
+    useEffect(()=>{
+        getUsers();
+
+    },[onlineUser])
     return (
         // here we use the bg-color/10 here 10 is for the transperency 
         <div className={`bg-[#8185B2]/10 w-full p-5 rounded-r-xl overflow-y-scroll text-white ${selectedUser ? "" : ""}`}>
@@ -40,19 +45,22 @@ export const SideBar = () => {
                 </div>
                 <div className='flex flex-col '>
                     {filteredUsers.map((user,index)=>(
-                        <div key={index} onClick={()=>(setSelectedUser(user))} className={`relative flex items-center gap-2 p-2  pl-4 rounded-md cursor-pointer  max-sm:text-sm 
+                        // we can set the unseenMessage to 0 when user click on the setselctedUser
+                        <div key={index} onClick={()=>{(setSelectedUser(user)); setUnseenMessage((prev)=>({...prev,[user._id]:0})) }} className={`relative flex items-center gap-2 p-2  pl-4 rounded-md cursor-pointer  max-sm:text-sm 
                             ${selectedUser?._id === user._id && 'bg-[#282142]/50' }`}>
                             <img src={user?.profilePic || assets.avatar_icon} alt="user" className='w-[35px] aspect-[1/1] rounded-full' ></img>
                             {/**/}
                             <div className='flex flex-col leading-5'>
                                 <p>{user.fullName}</p>
                                 {   //here index < 3 means from the array index 0-2 user show online and other offline
-                                    index < 3
+                                    // index < 3
+                                    onlineUser.includes(user._id)
                                     ? <span className='text-green-400 text-xs'>online</span> 
                                     : <span className='text-gray-400 text-xs'>offline</span>
                                 }
                             </div>
-                            {index > 2 && <p className='absolute  top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/50 '>{index}</p>}
+                            {/* unseenMessage  which not read we can see */}
+                            {unseenMessage[user._id] > 0 && <p className='absolute  top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/50 '>{unseenMessage[user._id]}</p>}
                         </div>
                     ))}
 
