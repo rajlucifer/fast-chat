@@ -35,10 +35,10 @@ export const ProfilePage = () => {
         <form onSubmit={submitHandler} className='flex flex-col gap-5 p-10 flex-1'>
           <h3 className=' text-white text-lg '>Profile Details</h3>
           <label htmlFor='avatar' className='flex items-center gap-3 cursor-pointer'>
-            <input onChange={(e)=>setSelectedImg(e.target.files[0])} type='file' id="avatar"  accept='.png .jpeg .jpg' hidden />
-            <img src={selectedImg ? URL.createObjectURL(selectedImg) : assets.avatar_icon }  className={`w-12 h-12  object-cover rounded-full  ${selectedImg && 'rounded-full'} `}>
+            <input onChange={(e)=>setSelectedImg(e.target.files[0])} type='file' id="avatar"  accept='png, .jpeg ,.jpg' hidden />
+            <img src={selectedImg ? URL.createObjectURL(selectedImg) : authUser?.profilePic ||assets.avatar_icon }  className={`w-12 h-12  object-cover rounded-full  ${selectedImg && 'rounded-full'} `}>
             </img>
-            Upload Image Profile
+            <p className='text-gray-400'>Upload Image Profile</p>
              
           </label>
           <input onChange={(e)=>setName(e.target.value)} type='text' placeholder='Enter Your Name'  value={name} required className='bg-transparent  outline-none  p-2 border border-gray-500  ring-2 ring-violet-400 rounded-md' />
