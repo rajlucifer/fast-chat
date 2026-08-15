@@ -167,10 +167,37 @@ export const deleteChat = async (req, res) => {
             })
         }
         await MessageModel.findByIdAndDelete(messageId);
-        res.json({
+        
+       // Get both users socket IDs
+        const senderSocketId =
+            userSocketMap[message.senderId.toString()];
+
+        const receiverSocketId =
+            userSocketMap[message.receiverId.toString()];
+
+
+        // Send delete event to sender
+        if (senderSocketId) {
+            io.to(senderSocketId).emit(
+                "messageDeleted",
+                messageId
+            );
+        }
+
+
+        // Send delete event to receiver
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit(
+                "messageDeleted",
+                messageId
+            );
+        }
+
+         res.json({
             success: true,
             message: "Message deleted Successfully"
-        })
+        });
+
 
 
     }
