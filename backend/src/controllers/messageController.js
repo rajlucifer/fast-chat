@@ -1,7 +1,7 @@
 import MessageModel from "../models/message.js";
 import UserModel from "../models/Users.js";
 import cloudinary from "../lib/cloudinary.js";
-import {io,userSocketMap} from "../../server.js"
+import { io, userSocketMap } from "../../server.js"
 
 
 // get all user except logged in user
@@ -13,19 +13,19 @@ export const getUsersForSiderBar = async (req, res) => {
 
         // count number of message not seen 
         const unseenMessage = {};
-        const promises = filterUser.map(async(user)=>{
-            const messages = await MessageModel.find({senderId:user._id,receiverId:userId,seen:false});
-            if(messages.length > 0){
+        const promises = filterUser.map(async (user) => {
+            const messages = await MessageModel.find({ senderId: user._id, receiverId: userId, seen: false });
+            if (messages.length > 0) {
                 // by doing this we can create the key value pair of object
                 unseenMessage[user._id] = messages.length;
             }
 
-            
+
         })
         await Promise.all(promises);
         res.json({
-            success:true,
-            users:filterUser,
+            success: true,
+            users: filterUser,
             unseenMessage,
         })
 
@@ -45,25 +45,25 @@ export const getUsersForSiderBar = async (req, res) => {
 
 //get message for selected user
 
-export const getMessages = async(req,res)=>{
-    try{
-        const{ id:selectedUserId } = req.params;
+export const getMessages = async (req, res) => {
+    try {
+        const { id: selectedUserId } = req.params;
         const myId = req.user._id;
         const messages = await MessageModel.find({
-            $or:[
-                {senderId:myId,receiverId:selectedUserId},
-                {senderId:selectedUserId,receiverId:myId}
+            $or: [
+                { senderId: myId, receiverId: selectedUserId },
+                { senderId: selectedUserId, receiverId: myId }
             ]
         });
-        await MessageModel.updateMany({senderId:selectedUserId,receiverId:myId},{seen:true});
+        await MessageModel.updateMany({ senderId: selectedUserId, receiverId: myId }, { seen: true });
         res.json({
-            success:true,
+            success: true,
             messages
         })
 
 
     }
-    catch(error){
+    catch (error) {
         console.log(error.message);
         res.json({
             success: false,
@@ -76,18 +76,18 @@ export const getMessages = async(req,res)=>{
 
 //api to mark message as seen using message id
 
-export const markMessageSeen = async(req,res)=>{
-    try{
-        const {id} = req.params;
-        await MessageModel.findByIdAndUpdate({id},{seen:true});
+export const markMessageSeen = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await MessageModel.findByIdAndUpdate({ id }, { seen: true });
         res.json({
-            success:true,
-            
+            success: true,
+
         })
 
 
     }
-    catch(error){
+    catch (error) {
         console.log(error.message);
         res.json({
             success: false,
@@ -100,14 +100,14 @@ export const markMessageSeen = async(req,res)=>{
 
 //send message to selected user
 
-export const sendMessage = async(req,res)=>{
-    try{
-        const {text,image} =req.body;
-        const receiverId =  req.params.id;
+export const sendMessage = async (req, res) => {
+    try {
+        const { text, image } = req.body;
+        const receiverId = req.params.id;
         // we get the sendId which is we get from the protected routes
         const senderId = req.user._id;
         let imageUrl;
-        if(image){
+        if (image) {
             const uploadResponse = await cloudinary.uploader.unsigned_upload(image, "chat-profile-pic", {
                 resource_type: "auto"
             });
@@ -118,26 +118,63 @@ export const sendMessage = async(req,res)=>{
         const newMessage = await MessageModel.create({
             senderId,
             receiverId,
-            image:imageUrl,
+            image: imageUrl,
             text
 
 
         })
         //emit the new message to the receiver socket
         const receiverSocketId = userSocketMap[receiverId];
-        if(receiverId){
-            io.to(receiverSocketId).emit("newMessage",newMessage);
+        if (receiverId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage);
         }
 
         res.json({
-            success:true,
-            message:newMessage
+            success: true,
+            message: newMessage
         })
 
 
 
     }
-    catch(error){
+    catch (error) {
+        console.log(error.message);
+        res.json({
+            success: false,
+            message: error.message
+        })
+
+    };
+
+};
+
+// delete the chat using the id 
+export const deleteChat = async (req, res) => {
+    try {
+        const { id: messageId } = req.params;
+        const myId = req.user._id;
+        const message = await MessageModel.findOne({
+            _id: messageId,
+            $or: [
+                { senderId: myId },
+                { receiverId: myId }
+            ]
+        });
+        if (!message) {
+            return res.json({
+                success: false,
+                message: "Message Not Found"
+            })
+        }
+        await MessageModel.findByIdAndDelete(messageId);
+        res.json({
+            success: true,
+            message: "Message deleted Successfully"
+        })
+
+
+    }
+    catch (error) {
         console.log(error.message);
         res.json({
             success: false,
@@ -145,5 +182,4 @@ export const sendMessage = async(req,res)=>{
         })
 
     }
-
-}
+};
