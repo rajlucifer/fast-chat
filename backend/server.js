@@ -84,3 +84,5 @@ if(process.env.PORT !== "production"){
 })
 
 }
+
+export default server;
