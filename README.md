@@ -27,7 +27,7 @@ A full-stack **real-time chat application** built with React, Node.js, Socket.IO
 - 📱 **Fully Responsive** — Mobile, tablet & desktop ready
 - 🔒 **Protected Routes** — Auth-guarded pages on both client and server
   
- **live link here :---** https://fast-chat-1h7c.vercel.app/
+ **Live Link Here :---** https://fast-chat-1h7c.vercel.app/
 ---
 
 ## 🛠️ Tech Stack
