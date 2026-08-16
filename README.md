@@ -1,4 +1,4 @@
-# 💬 NeuroChat
+# 💬 FastChat
 
 <div align="center">
 
@@ -116,8 +116,8 @@ chatapp/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/rajlucifer/NeuroChat.git
-cd NeuroChat
+git clone https://github.com/rajlucifer/FastChat.git
+cd FastChat
 ```
 
 ### 2. Setup the Backend
@@ -277,7 +277,7 @@ This project is deployed across two platforms:
 | `CLOUDINARY_API_KEY` | Your Cloudinary API key |
 | `CLOUDINARY_SECRET_KEY` | Your Cloudinary API secret |
 
-4. Click **Deploy** — copy the live URL (e.g. `https://neurochat-backend.onrender.com`)
+4. Click **Deploy** — copy the live URL (e.g. `https://FastChat-backend.onrender.com`)
 
 ---
 
@@ -297,7 +297,7 @@ This project is deployed across two platforms:
 
 | Key | Value |
 |---|---|
-| `VITE_BACKEND_URL` | Your Render backend URL (e.g. `https://neurochat-backend.onrender.com`) |
+| `VITE_BACKEND_URL` | Your Render backend URL (e.g. `https://FastChat-backend.onrender.com`) |
 
 4. Click **Deploy** — Vercel will auto-deploy on every push to `main`.
 
