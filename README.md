@@ -8,7 +8,8 @@ A full-stack **real-time chat application** built with React, Node.js, Socket.IO
 ![Node.js](https://img.shields.io/badge/Node.js-24-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![Socket.IO](https://img.shields.io/badge/Socket.IO-4.8-010101?style=for-the-badge&logo=socket.io&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
-![Deployed on Render](https://img.shields.io/badge/Deployed-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)
+![Backend on Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)
+![Frontend on Vercel](https://img.shields.io/badge/Frontend-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 </div>
 
@@ -245,27 +246,64 @@ VITE_BACKEND_URL=https://your-backend-url.onrender.com
 
 ---
 
-## ☁️ Deployment on Render
+## ☁️ Deployment
 
-### Backend (Web Service)
+This project is deployed across two platforms:
+
+- 🟢 **Backend** → [Render](https://render.com) (Web Service)
+- ▲ **Frontend** → [Vercel](https://vercel.com) (Static Site)
+
+---
+
+### Backend — Render (Web Service)
+
+1. Go to [render.com](https://render.com) → **New Web Service**
+2. Connect your GitHub repo and configure:
 
 | Setting | Value |
 |---|---|
 | **Root Directory** | `backend` |
+| **Runtime** | `Node` |
 | **Build Command** | `npm install` |
 | **Start Command** | `npm start` |
-| **Environment Variables** | Add all backend `.env` keys in the Render dashboard |
 
-### Frontend (Static Site)
+3. Under **Environment Variables**, add all your backend `.env` keys:
+
+| Key | Description |
+|---|---|
+| `MONGO_URI` | MongoDB Atlas connection string |
+| `JWT_SECRET` | Secret key for signing JWT tokens |
+| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | Your Cloudinary API key |
+| `CLOUDINARY_SECRET_KEY` | Your Cloudinary API secret |
+
+4. Click **Deploy** — copy the live URL (e.g. `https://neurochat-backend.onrender.com`)
+
+---
+
+### Frontend — Vercel (Static Site)
+
+1. Go to [vercel.com](https://vercel.com) → **New Project** → Import your GitHub repo
+2. Configure the project:
 
 | Setting | Value |
 |---|---|
 | **Root Directory** | `frontend` |
+| **Framework Preset** | `Vite` |
 | **Build Command** | `npm run build` |
-| **Publish Directory** | `dist` |
-| **Environment Variables** | Set `VITE_BACKEND_URL` to your Render backend URL |
+| **Output Directory** | `dist` |
 
-> 💡 Deploy the backend first, then copy its URL into the frontend's `VITE_BACKEND_URL` environment variable before building.
+3. Under **Environment Variables**, add:
+
+| Key | Value |
+|---|---|
+| `VITE_BACKEND_URL` | Your Render backend URL (e.g. `https://neurochat-backend.onrender.com`) |
+
+4. Click **Deploy** — Vercel will auto-deploy on every push to `main`.
+
+---
+
+> 💡 **Order matters:** Deploy the **backend on Render first**, then paste its URL as `VITE_BACKEND_URL` when setting up Vercel.
 
 ---
 
