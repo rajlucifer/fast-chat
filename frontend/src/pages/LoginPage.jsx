@@ -3,6 +3,7 @@ import assets from '../assets/assets'
 import { useState } from 'react'
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { HiChatBubbleLeftRight } from "react-icons/hi2";
 
 export const LoginPage = () => {
   const [currState,setCurrState]= useState("Sign up");
@@ -24,7 +25,10 @@ export const LoginPage = () => {
   return (
     <div className='min-h-screen bg-cover bg-center  flex items-center justify-center gap-8 sm:justify-evenly  max-sm:flex-col backdrop-blur-xl '>
       {/*in left side we placed the image */}
-      <img src={assets.logo_big} alt="logo" className='w-[min(30vw,250px)]'></img>
+      <div>
+        <HiChatBubbleLeftRight className=' w-[min(30vw,170px)] h-[min(30vw,170px)] text-purple-600 ' />
+        <h1 className='text-center font-serif text-white text-5xl'>Fast Chat</h1>
+      </div>
       {/* here we write the right columns */}
       <form onSubmit={onSubmitHandler} className='border-2 bg-white/10 text-white border-gray-500 p-6 flex flex-col  gap-6 rounded-lg shadow-lg'>
         <h2 className='font-medium  text-2xl flex  justify-between items-center '>
@@ -55,7 +59,7 @@ export const LoginPage = () => {
         <button type="submit" className='py-3 bg-gradient-to-r from-purple-400 to-violet-400 rounded-md text-white cursor-pointer'
         >{currState ==="Sign up" ? "Create Account" : "Login Now"}</button>
         <div className='flex items-center gap-2 text-sm text-gray-400'>
-          <input type="checkbox"/>
+          <input type="checkbox" required/>
           <p>Agree to the terms of use of pravicy & policy.</p>
         </div>
         <div className='flex flex-col gap-2'>

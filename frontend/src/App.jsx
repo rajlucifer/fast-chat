@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import bgImg from "../src/assets/bgImage.svg"
+import bgImg from "../public/bgimage.png"
 import './App.css'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { HomePage } from './pages/HomePage'

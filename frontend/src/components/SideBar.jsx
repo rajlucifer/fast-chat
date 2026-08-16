@@ -6,6 +6,8 @@ import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { HiChatBubbleLeftRight } from "react-icons/hi2";
+
 
 export const SideBar = () => {
 
@@ -24,7 +26,11 @@ export const SideBar = () => {
         <div className={`bg-[#8185B2]/10 w-full p-5 rounded-r-xl overflow-y-scroll text-white ${selectedUser ? "" : ""}`}>
             <div className='pb-5'>
                 <div className='flex justify-between items-center'>
-                    <img src={assets.logo} alt="logo" className='max-w-40'></img>
+                   
+                    <div className='flex items-center gap-2 ml-[10px]'>
+                        <HiChatBubbleLeftRight className='w-[30px] h-[30px] text-purple-600'/>
+                        <h1 className='font-medium'>Fast Chat</h1>
+                    </div>
                     {/*here we use the group because now if any one hover on 3 dot then i show both option using group-hover */}
                     <div className='relative py-2 group'>
                         <img src={assets.menu_icon} alt="menu" className='max-h-5 cursor-pointer'></img>
