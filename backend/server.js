@@ -78,11 +78,11 @@ dns.setServers(['8.8.8.8','1.1.1.1']);
 await connectDB();
 
 
-if(process.env.PORT !== "production"){
-    server.listen(PORT,()=>{
+ 
+server.listen(PORT,()=>{
     console.log(`Server Is Running on ${PORT}`);
-})
+});
+ 
 
-}
 
-export default server;
+
